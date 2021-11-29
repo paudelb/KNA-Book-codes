@@ -1,0 +1,47 @@
+#!/bin/tcsh -f 
+#
+# You need to compile jack.f90 and copy or link the program jack in
+# the current directory. The file jack.f90 is in the Tools directory.
+#
+set Ls       = (10 20 40 60 80 100)
+set betas    = (0.00 0.10 0.20 0.25 0.30 0.34 0.38 \
+                0.40 0.42 0.43 0.44 0.45 0.46 0.48 \
+                0.48 0.50 0.55 0.60 0.65 0.70 0.80 )
+set nsweeps  = 10000
+#---------------------------------------------------
+set seed     = `< /dev/urandom tr -dc "[:digit:]" |head -c8| awk '{printf "%d\n",$1}'`
+@ jsweeps    = $nsweeps + 10
+foreach  L    ($Ls   )
+ set start   = "-s 1 -S $seed " #-s: 1 (hot)/0 (cold)/2 (old)
+ foreach beta ($betas)
+  ./is -L $L -b $beta -n $nsweeps  $start > outL${L}b${beta}
+  set start  = "-s 2"
+  # Calculate <e> = <E>/(2N and c=beta^2*N*(<e^2>-<e>^2):
+  grep -v '#' outL${L}b${beta}           | \
+  awk -v L=$L 'NR>5000{print $1/(2*L*L)}' | \
+  ./jack -d $jsweeps | grep -v '#'                   | \
+  awk -v L=$L -v b=$beta '{print "e",L,b,$1,$2,b*b*L*L*$3,b*b*L*L*$4}'
+  # Calculate <m> = <|M|>/N and chi=beta*N*(<m^2>-<m>^2)
+  grep -v '#' outL${L}b${beta}                        | \
+  awk -v L=$L 'NR>5000{m=($2>0)?$2:-$2;print m/(L*L)}' | \
+  ./jack -d $jsweeps | grep -v '#'                                | \
+  awk -v L=$L -v b=$beta '{print "m",L,b,$1,$2,b*L*L*$3,b*L*L*$4}'  
+ end
+end
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

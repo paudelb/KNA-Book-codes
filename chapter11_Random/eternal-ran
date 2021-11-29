@@ -1,0 +1,16 @@
+#!/bin/tcsh -f 
+
+set type = dots
+#set type = lines
+
+cat <<EOF > /tmp/tmpplt
+plot [:][:] "data" using 1:2 notitle with  $type
+pause 1
+reread
+EOF
+\gnuplot -persist <<EOF
+call "/tmp/tmpplt"
+EOF
+
+
+

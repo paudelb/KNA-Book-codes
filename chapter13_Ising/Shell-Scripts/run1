@@ -1,0 +1,17 @@
+#!/bin/tcsh -f 
+
+# Thermalization
+./is -L 10 -b 0.10 -n 10000 -s 1 -S 122323 > L10b0.100.out
+# Use older configurations....
+./is -L 10 -b 0.12 -n 10000 -s 2 > L10b0.120.out
+./is -L 10 -b 0.14 -n 10000 -s 2 > L10b0.140.out
+./is -L 10 -b 0.16 -n 10000 -s 2 > L10b0.160.out
+./is -L 10 -b 0.18 -n 10000 -s 2 > L10b0.180.out
+./is -L 10 -b 0.20 -n 10000 -s 2 > L10b0.200.out
+./is -L 10 -b 0.22 -n 10000 -s 2 > L10b0.220.out
+./is -L 10 -b 0.24 -n 10000 -s 2 > L10b0.240.out
+./is -L 10 -b 0.26 -n 10000 -s 2 > L10b0.260.out
+./is -L 10 -b 0.28 -n 10000 -s 2 > L10b0.280.out
+./is -L 10 -b 0.30 -n 10000 -s 2 > L10b0.300.out
+./is -L 10 -b 0.32 -n 10000 -s 2 > L10b0.320.out
+

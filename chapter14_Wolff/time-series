@@ -1,0 +1,76 @@
+#!/bin/tcsh -f 
+
+set cdir = $cwd
+set prog = `basename $0`
+set argv = ( `getopt T:h $argv`)
+while ( "$argv[1]" != "--")
+ switch ("$argv[1]")
+  case -T:
+   set T = $argv[2]
+   shift
+   shift
+   breaksw
+  case -h:
+   goto usage
+   shift
+   breaksw
+ endsw
+end   # while
+shift # get rid of --
+
+if( $#argv < 0 )then
+usage:
+ cat << EOF > /dev/stderr
+Usage: $prog <word> <file(s)>
+     <word> = e,m (absolute value),E,M (with sign), w/c (Wolff cluster)
+EOF
+ exit(1)
+endif
+
+if( $#argv < 1) goto usage
+set w     = $argv[1]
+shift argv
+if( $#argv) then
+ set files = ($argv)
+else
+ set files = "/dev/stdin"
+endif
+switch ($w)
+ case w:
+ case c:
+  awk '/# L/{L=$4;N=L*L;Nl=2*N} $1== "#clu"{print $2/N}' $files
+  breaksw
+ case e: # normalized energy
+  awk '/# L/{L=$4;N=L*L;Nl=2*N}  ($1 != "#" && $1!= "#clu"){print $1/Nl}' $files
+  breaksw
+ case m: # normalized abs. value of magnetization
+   awk '/# L/{L=$4;N=L*L;Nl=2*N} ($1 != "#" && $1!= "#clu") {if($2<0){$2=-$2};print $2/N}' $files
+  breaksw
+ case E: # energy
+  awk '($1 != "#" && $1!= "#clu"){print $1}' $files
+  breaksw
+ case M: # (signed) magnetizationn,
+  awk '($1 != "#" && $1!= "#clu"){print $2}' $files
+  breaksw
+ default:
+  echo "${prog}: Sorry, word $w not understood" > "/dev/stderr"
+  goto usage
+  breaksw
+endsw
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

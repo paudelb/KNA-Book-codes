@@ -1,0 +1,139 @@
+#!/bin/tcsh -f
+
+# # Strip everything out to make it work:
+# #  cat plot-commands | perl -nle 's/^# //;print;' > myscript
+# # Electric field lines of charge configurations:
+# f77 -O2 ELines.f -o el 
+# ./el <<EOF > hi
+# 1
+# 0 0 1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Efield_1.eps"
+#  plot [-4:4][-4:4] "hi" with dots notit
+#  set out 
+# EOF
+# ./el <<EOF > hi
+# 2
+#  1 0 1
+# -1 0 1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Efield_2.eps"
+#  plot [-4:4][-4:4] "hi" with dots notit
+#  set out 
+# EOF
+# ./el <<EOF > hi
+# 2
+#  1 0  1
+# -1 0 -1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Efield_-2.eps"
+#  plot [-4:4][-4:4] "hi" with dots notit
+#  set out 
+# EOF
+# ./el <<EOF > hi
+# 4
+#  1  1  -1
+# -1  1  1
+#  1 -1  1
+# -1 -1  -1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Efield_4.eps"
+#  plot [-4:4][-4:4] "hi" with dots notit
+#  set out 
+# EOF
+# ./el <<EOF > hi
+# 6
+#  1  1.73205  1
+# -1  1.73205 -1
+# -2  0        1
+# -1 -1.73205 -1
+#  1 -1.73205  1
+#  2  0       -1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Efield_6.eps"
+#  plot [-4:4][-4:4] "hi" with dots notit
+#  set out 
+# EOF
+# f77 -O2 EPotential.f -o ep
+# ./ep <<EOF > hi
+# 2
+# 1 0 1
+# -1 0 1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Epot_2.eps"
+#  plot "hi" with dots notit
+#  set out 
+# EOF
+# ./ep <<EOF > hi
+# 6
+#  1  1.73205  1
+# -1  1.73205 -1
+# -2  0        1
+# -1 -1.73205 -1
+#  1 -1.73205  1
+#  2  0       -1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Epot_6.eps"
+#  plot [-10:10][-10:10] "hi" with dots notit
+#  set out 
+# EOF
+# ./ep <<EOF > hi
+# 4
+#  1  1  -1
+# -1  1  1
+#  1 -1  1
+# -1 -1  -1
+# EOF
+# gnuplot <<EOF
+#  set size ratio 1
+#  set term post enhanced color eps 24
+#  set out "Epot_4.eps"
+#  plot  [-3.2:3.2][-3.2:3.2]  "hi" with dots notit
+#  set out 
+# EOF
+f77 ELines_step0.f -o el 
+./el > el.out
+gnuplot <<EOF
+set term post enhanced color eps 24
+set out "ELines_step0.eps"
+plot "el.out" with dots notitle
+set out
+EOF
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

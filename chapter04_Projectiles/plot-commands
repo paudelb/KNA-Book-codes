@@ -1,0 +1,275 @@
+#!/bin/tcsh -f 
+
+# # ##############################################################
+# # #euler plots: Make sure parameter(p=110000) in euler.f
+# euler.csh    -x 0.02 50 100 1000 10000 50000 80000 100000
+# euler.csh -n -x 3.00 50 100 1000 10000 15000 18000 20000 100000
+# # ##############################################################
+# # #compare methods with harmonic oscillator
+# ./hoc.csh 50 500 5000 50000
+# # ##############################################################
+# # #damped linear oscillator
+# # #overdamping:
+# ./dlo.csh 3.145 3.145 6.29   0.0 20000  4 5 0
+# \mv -f dlo.dat dlo2.0.dat
+# ./dlo.csh 3.145 3.145 3.145  0.0 20000  5 5 0
+# \mv -f dlo.dat dlo1.0.dat
+# ./dlo.csh 3.145 3.145 1.572  0.0 20000  8 5 0
+# \mv -f dlo.dat dlo0.5.dat
+# ./dlo.csh 3.145 3.145 0.3145 0.0 20000 35 5 0
+# \mv -f dlo.dat dlo0.1.dat
+# We use gnuplot now:
+# gnuplot -persist <<EOF
+# set xlabel "t"
+# set ylabel "x"
+# plot [0:10]\
+# "dlo2.0.dat" using 1:2 with lines t "6.29" ,\
+# "dlo1.0.dat" using 1:2 with lines t "3.15" ,\
+# "dlo0.5.dat" using 1:2 with lines t "1.57" ,\
+# "dlo0.1.dat" using 1:2 with lines t "0.32" 
+# set term post enha color eps
+# set out "dlo_x.eps"
+# replot
+# set out
+# set term x11 2
+# set xlabel "x"
+# set ylabel "v"
+# set size square
+# plot \
+# "dlo2.0.dat" using 2:3 with lines t "6.29" ,\
+# "dlo1.0.dat" using 2:3 with lines t "3.15" ,\
+# "dlo0.5.dat" using 2:3 with lines t "1.57" ,\
+# "dlo0.1.dat" using 2:3 with lines t "0.32" 
+# set term post enha color eps
+# set out "dlo_xv.eps"
+# replot
+# set out
+# EOF
+# # ##############################################################
+#  if( -f dlo_T.dat ) \rm dlo_T.dat
+#  foreach gamma (5.0 4.5 4.0 3.5 3.0 2.5 2.0 1.5 1.0 0.8 0.6 0.4 0.2 0.1 )
+#   set tf = `awk -v g=$gamma 'BEGIN{print 10/g}'`
+#   ./dlo.csh 3.145 3.145 $gamma 0.0 20000 $tf 5 0 | tee -a dlo_T.dat 
+#  end
+# # make plot of amplitude vs time:
+# gnuplot -persist <<EOF
+# set log y
+# set xlabel "t"
+# set ylabel "Amplitude"
+# plot [:40]\
+# "< grep ^A dlo_T.dat|awk '\$4==1.0{print \$6,\$7}'" w l t "1.0",\
+# "< grep ^A dlo_T.dat|awk '\$4==0.8{print \$6,\$7}'" w l t "0.8",\
+# "< grep ^A dlo_T.dat|awk '\$4==0.6{print \$6,\$7}'" w l t "0.6",\
+# "< grep ^A dlo_T.dat|awk '\$4==0.4{print \$6,\$7}'" w l t "0.4",\
+# "< grep ^A dlo_T.dat|awk '\$4==0.2{print \$6,\$7}'" w l t "0.2",\
+# "< grep ^A dlo_T.dat|awk '\$4==0.1{print \$6,\$7}'" w l t "0.1"
+# set term post enhan color eps
+# set out "dlo_ampl.eps"
+# replot
+# set out
+# EOF
+# # Here is the plot of omega versus gamma
+# gnuplot -persist <<EOF
+# set xlabel "{/Symbol g}^2"
+# set ylabel "4 {/Symbol w}_0^2 - (2 {/Symbol p}/T)^2"
+# set log
+# plot [0.5:30][0.4:30] \
+# "dlo_omega.dat" u (\$1*\$1):(4*3.145*3.145-4*pi*pi/(\$2*\$2)) notit,x notit
+# set term post enhan color eps
+# set out "dlo_omega.eps"
+# replot
+# set out
+# EOF
+# # ###############################################################
+# #   Put external force now. First study trnasient period
+# ./dlo.csh 3.145 2 0.5 1 20000 60 1 0
+# \mv -f dlo.dat tmp.dlo1.dat
+# ./dlo.csh 3.145 2 0.5 1 20000 60 0 1
+# \mv -f dlo.dat tmp.dlo2.dat
+# gnuplot -persist <<EOF
+# set xlabel "t"
+# set ylabel "x(t)"
+# plot [:60][:]\
+# "tmp.dlo1.dat" u 1:2 w l t "x_0=1 v_0=0",\
+# "tmp.dlo2.dat" u 1:2 w l t "x_0=0 v_0=1"
+# set term post enhan color eps
+# set out "dlo_transient.eps"
+# replot
+# set out
+# EOF
+# \rm tmp.dlo1.dat tmp.dlo2.dat
+# gnuplot -persist <<EOF
+# gamma  = 0.5
+# a0     = 1.0
+# omega0 = 3.145
+# a(x)   = a0/sqrt((omega0**2-x**2)**2+x**2*gamma**2)
+# set xlabel "{/Symbol w}"
+# set ylabel "x_0({/Symbol w})"
+# plot [1:] "dlo_ampl.dat" u 2:3 notit, a(x) notit
+# set term post enhan color eps
+# set out "dlo_ampl_omega.eps"
+# replot
+# set out
+# EOF
+# # # Plot the attractor of the forced oscillation:
+# ./dlo.csh 3.145 2 0.5 1 20000 1000 1 0
+# gnuplot -persist <<EOF
+# set size square
+# set term x11 1
+# set xlabel "x"
+# set ylabel "v"
+# plot "<awk '\$1>0' dlo.dat" u 2:3 w l notit
+# set term post enhan color eps
+# set out "dlo_poincare_1.eps"
+# replot
+# set out
+# set term x11 2
+# plot "<awk '\$1>100' dlo.dat" u 2:3 w l notit
+# set term post enhan color eps
+# set out "dlo_poincare_2.eps"
+# replot
+# set out
+# EOF
+# # ########################################################
+# # Forced Damped Oscillator
+# # Phase Space Plots
+# ./fdp.csh 1 2 0.2 0.6 20000 1000 3.1 0 500
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG0.60.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 0.72 40000 2000 3.1 0 1500
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG0.72.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 0.85 40000 2000 0.4 0 1500
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG0.85.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 1.02 40000 2000 3.1 0 1500
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG1.02.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 1.031 40000 2000 3.1 0 1500
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG1.031.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 1.033 100000 6000 3.1 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG1.033.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 1.04 100000 6000 3.1 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG1.04.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 1.568 100000 6000 0.3 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG1.568.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 3.1 100000 6000 3.1 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG3.1.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 3.8 100000 6000 3.1 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG3.8.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+# set omega = 2
+# set STEPS = 100000
+# set TF    = 6000
+# ./fdp.csh 1 2 0.2 4.5 100000 6000 3.1 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG4.5.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# set out "fdp_poincareG4.5.eps"
+# plot "<awk -v o=$omega -v s=$STEPS -v tf=$TF 'BEGIN{T=6.283185307179/o;dt=tf/s;}\$1%T<dt' fdp.dat" using 2:3 with points pt 7 ps 1  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 1.4 100000 6000 3.1 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG1.4.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# set out "fdp_poincareG1.4.eps"
+# plot "<awk -v o=$omega -v s=$STEPS -v tf=$TF 'BEGIN{T=6.283185307179/o;dt=tf/s;}\$1%T<dt' fdp.dat" using 2:3 with points pt 7 ps 1  notit
+# set out
+# EOF
+# ./fdp.csh 1 2 0.2 4.44 100000 6000 3.1 0 2000
+# gnuplot <<EOF
+# set size square
+# set term post enhan color eps
+# set out "fdp_phaseG4.44.eps"
+# plot    "fdp.dat" using 2:3 with dots  notit
+# set out
+# EOF
+gnuplot <<EOF
+set size square
+set term post enhan color eps
+set out "fdp_basinG0.85.eps"
+plot    "<zcat fdp_basin0.85.gz|awk '\$3==1'" u 1:2 with dots notit
+set out
+set out "fdp_basinG1.4.eps"
+plot    "<zcat fdp_basin1.4.gz|awk '\$3==1'" u 1:2 with dots notit
+set out
+EOF
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

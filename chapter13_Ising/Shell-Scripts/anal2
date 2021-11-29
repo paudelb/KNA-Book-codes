@@ -1,0 +1,37 @@
+#!/bin/tcsh -f 
+
+
+# ##################################################################
+# Set Parameters for the analysis:
+set Ls     = (5 10 20)
+# ##################################################################
+
+set cdir = $cwd #we have this to point to the original place we started from
+
+foreach L ($Ls)
+ set dir = $cdir/L$L
+ cd $dir
+ set files = (L*.out.gz)
+ set NL    = `awk -v L=$L 'BEGIN{print 2*L*L}'` # number of bonds on lattice
+ set N     = `awk -v L=$L 'BEGIN{print   L*L}'` # number of sites on lattice
+ foreach f ($files)
+  #get beta from filename: Regular expression means:
+  #match a "b" in filename, 0 or more of digits, a dot (.) and then again
+  #0 or more digits
+  set beta = `echo $f |   perl -ne '/b(\d*\.\d*)/;print $1;'` 
+  set fname = $f:r:r     # remove extensions to get filename
+  #energy histogram
+  zgrep  -v "#" $f | awk -v NL=$NL '{print $1/NL}'  | \
+            ../histogram -v f=$NL > $fname.hse
+  #no absolute value here, we want to check symmetry
+  zgrep  -v "#" $f | awk -v N=$N   '{print $2/N}' | \
+            ../histogram -v f=$N  > $fname.hsm
+  # now energy and magnetization histograms:
+  echo -n "$L $beta "
+  zgrep  -v "#" $f | awk -v NL=$NL '{print $1/NL}'  | \
+            ../jack | grep -v "#"|awk '{printf "   %s %s    ", $1, $2}'
+  #we compute <|M|>
+  zgrep  -v "#" $f | awk -v N=$N   '{if($2<0){$2=-$2};print $2/N}' | \
+            ../jack | grep -v "#"|awk '{print $1, $2}'
+ end
+end

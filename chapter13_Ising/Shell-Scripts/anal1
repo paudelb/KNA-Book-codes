@@ -1,0 +1,145 @@
+#!/bin/tcsh -f 
+
+# beta = 0.100
+grep -v "#" L10b0.100.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.100.hse
+grep -v "#" L10b0.100.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.100.hsm
+echo -n "e 0.100 "
+grep -v "#" L10b0.100.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.100 "
+grep -v "#" L10b0.100.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.120
+grep -v "#" L10b0.120.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.120.hse
+grep -v "#" L10b0.120.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.120.hsm
+echo -n "e 0.120 "
+grep -v "#" L10b0.120.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.120 "
+grep -v "#" L10b0.120.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.140
+grep -v "#" L10b0.140.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.140.hse
+grep -v "#" L10b0.140.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.140.hsm
+echo -n "e 0.140 "
+grep -v "#" L10b0.140.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.140 "
+grep -v "#" L10b0.140.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.160
+grep -v "#" L10b0.160.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.160.hse
+grep -v "#" L10b0.160.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.160.hsm
+echo -n "e 0.160 "
+grep -v "#" L10b0.160.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.160 "
+grep -v "#" L10b0.160.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.180
+grep -v "#" L10b0.180.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.180.hse
+grep -v "#" L10b0.180.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.180.hsm
+echo -n "e 0.180 "
+grep -v "#" L10b0.180.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.180 "
+grep -v "#" L10b0.180.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.200
+grep -v "#" L10b0.200.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.200.hse
+grep -v "#" L10b0.200.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.200.hsm
+echo -n "e 0.200 "
+grep -v "#" L10b0.200.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.200 "
+grep -v "#" L10b0.200.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.220
+grep -v "#" L10b0.220.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.220.hse
+grep -v "#" L10b0.220.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.220.hsm
+echo -n "e 0.220 "
+grep -v "#" L10b0.220.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.220 "
+grep -v "#" L10b0.220.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.240
+grep -v "#" L10b0.240.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.240.hse
+grep -v "#" L10b0.240.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.240.hsm
+echo -n "e 0.240 "
+grep -v "#" L10b0.240.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.240 "
+grep -v "#" L10b0.240.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.260
+grep -v "#" L10b0.260.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.260.hse
+grep -v "#" L10b0.260.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.260.hsm
+echo -n "e 0.260 "
+grep -v "#" L10b0.260.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.260 "
+grep -v "#" L10b0.260.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.280
+grep -v "#" L10b0.280.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.280.hse
+grep -v "#" L10b0.280.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.280.hsm
+echo -n "e 0.280 "
+grep -v "#" L10b0.280.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.280 "
+grep -v "#" L10b0.280.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.300
+grep -v "#" L10b0.300.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.300.hse
+grep -v "#" L10b0.300.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.300.hsm
+echo -n "e 0.300 "
+grep -v "#" L10b0.300.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.300 "
+grep -v "#" L10b0.300.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+
+# beta = 0.320
+grep -v "#" L10b0.320.out | awk '{print $1/200}' | \
+            ./histogram -v f=200 > L10b0.320.hse
+grep -v "#" L10b0.320.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+            ./histogram -v f=100 > L10b0.320.hsm
+echo -n "e 0.320 "
+grep -v "#" L10b0.320.out | awk '{print $1/200}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'
+echo -n "m 0.320 "
+grep -v "#" L10b0.320.out | awk '{if($2<0){$2=-$2};print $2/100}' | \
+           ./jack |grep -v "#"|awk '{print $1, $2}'

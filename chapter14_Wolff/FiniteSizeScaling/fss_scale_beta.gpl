@@ -1,0 +1,60 @@
+bc = 0.5*log(1.0+sqrt(2.0));
+set fit errorvariables
+set macros
+set key bottom left
+bcc = "0.440687" # bc with accuracy calculated in data file all
+
+set ytics (0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,1.0)
+set xtics (40,60,80,100,160,200,500,1000)
+set term qt enhanced
+set log
+set xlabel "L"
+set ylabel "<m>({/Symbol b}_c,L)"
+gmacro = "\"<grep '^m' all|grep ' ".bcc." ' \""
+plot [30:1100] [0.4:0.7] @gmacro u 2:4:5 w e notit
+
+#------------------------------------
+g=-0.125;c=0.03;
+f(x) = c * x**(g)
+fit [30:110] f(x) @gmacro u 2:4:5 via c,g
+c1 = c; c1_err = c_err; g1 = g; g1_err = g_err; f1(x) = c1*x**(g1)
+replot f1(x) t "40-100 {/Symbol b/n}=".sprintf("%.4f+/-%.4f",-g1,g1_err)
+#------------------------------------
+g=-0.125;c=0.03;
+f(x) = c * x**(g)
+fit [130:1010] f(x) @gmacro u 2:4:5 via c,g
+c2 = c; c2_err = c_err; g2 = g; g2_err = g_err; f2(x) = c2*x**(g2)
+replot f2(x) t "140-1000 {/Symbol b/n}=".sprintf("%.4f+/-%.4f",-g2,g2_err)
+#------------------------------------
+g=-0.125;c=0.03;
+f(x) = c * x**(g)
+fit [10:1010] f(x) @gmacro u 2:4:5 via c,g
+c3 = c; c3_err = c_err; g3 = g; g3_err = g_err; f3(x) = c3*x**(g3)
+replot f3(x) t "40-1000 {/Symbol b/n}=".sprintf("%.4f+/-%.4f",-g3,g3_err)
+
+set term post enha eps color 24
+set out "fss_scale_beta.eps"
+plot [30:1100][0.4:0.7] @gmacro u 2:4:5 w e notit, \
+      f3(x) t "{/Symbol b/n}=".sprintf("%.4f+/-%.4f",-g3,g3_err)
+set out
+set term qt enha
+set ytics autofreq
+set xtics autofreq
+
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

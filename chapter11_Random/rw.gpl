@@ -1,0 +1,23 @@
+# Usage: call rw.gpl
+# Takes output configs written in file data from rw.f90 in the form:
+# iwalk x y
+# and prints them one by one
+maxwalk = 50 # this is the number of walks printed from rw.f90 in data
+if( !exists("nwalk")) nwalk=0
+if( nwalk >= maxwalk) nwalk=0
+if( nwalk ==       0) set size square
+if( nwalk ==       0) xmax = system("awk 'BEGIN{MAX=-100000}{if($2>MAX){MAX=$2}}END{print MAX}' data")
+if( nwalk ==       0) ymax = system("awk 'BEGIN{MAX=-100000}{if($3>MAX){MAX=$3}}END{print MAX}' data")
+if( nwalk ==       0) xmin = system("awk 'BEGIN{MIN= 100000}{if($2<MIN){MIN=$2}}END{print MIN}' data")
+if( nwalk ==       0) ymin = system("awk 'BEGIN{MIN= 100000}{if($3<MIN){MIN=$3}}END{print MIN}' data")
+if( nwalk ==       0) set xrange [xmin:xmax]
+if( nwalk ==       0) set yrange [ymin:ymax]
+nwalk   = nwalk + 1
+command = sprintf("<awk '$1==%d{print $2,$3}' data",nwalk)
+print sprintf("Nwalk= %d",nwalk)
+set arrow from 0,graph 0  to 0,graph 1 nohead
+set arrow from xmin,0     to xmax,0    nohead
+plot command w l t sprintf("%d",nwalk)
+
+pause 1
+if(nwalk < maxwalk) reread

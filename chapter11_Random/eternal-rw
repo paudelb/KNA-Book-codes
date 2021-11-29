@@ -1,0 +1,23 @@
+#!/bin/tcsh -f 
+
+#set type = dots
+set type = lines
+
+cat <<EOF > /tmp/tmpplt
+set term x11 1
+plot "data"  using 1:2 notitle with $type
+set term x11 2
+plot "dataR" using 1   notitle with $type
+pause 2
+reread
+EOF
+set xdim = 250
+set ydim = 167
+set xpos = 1
+set ypos = 1
+/usr/bin/gnuplot -geometry ${xdim}x${ydim}+${xpos}+${ypos} -persist <<EOF
+call "/tmp/tmpplt"
+EOF
+
+
+

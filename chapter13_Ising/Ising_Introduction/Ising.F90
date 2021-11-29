@@ -1,0 +1,152 @@
+!================== Ising.F90 ====================
+! Alternative way of programming: create a module Ising2D with
+! all functions in the files:
+! drandom.f90  init.f90  ising.F90  main.f90  
+! measure.f90  met.f90
+!--------------------------------------------------
+module     Ising2D
+ implicit none
+ SAVE
+ integer                :: L
+ integer                :: N
+ integer                :: XNN, YNN
+ integer,allocatable    :: s(:)
+ real(8),dimension(0:4) :: prob
+ real(8)                :: beta
+ integer                :: nsweep,start
+ integer                :: seed
+!--------------------------------------------------
+CONTAINS
+!--------------------------------------------------
+ subroutine init !inherits implicit none!
+  integer :: i
+!----------------------
+!Ask user for input:
+  print *,'# Enter L, beta, seed, nsweep, start (0 cold/1 hot):'
+  read  *,         L, beta, seed, nsweep, start
+  print *,'#     ',L, beta, seed, nsweep, start
+  N = L*L; XNN = 1; YNN = L
+  ALLOCATE(s(N))
+
+!initialize probabilities for E_\nu > E_mu
+  prob=0.0D0
+! Sum_<ik> s_i^\mu = -4, -2, 0, +2, +4
+! Need:     exp(-2*beta*4), exp(- 2*beta*2) 
+! and not:  exp( 2*beta*0), exp(  2*beta*2),exp(2*beta*4)
+  do i=2,4,2 !i = dE/2 = (E_nu-E_mu)/2=2,4
+   prob(i) = exp(-2.0D0*beta*i)
+  enddo
+  !initial configuration:
+  select case(start)
+  case(0)!cold:
+   s = 1 !all s(i) = 1
+  case(1)!hot:
+   do i=1,N
+    if(drandom() .lt. 0.5D0)then
+     s(i) =  1
+    else
+     s(i) = -1
+    endif
+   enddo
+  case default
+   print *,'init: start= ',start,' not valid. Exiting...'
+   stop
+  end select
+  
+ end subroutine init
+!--------------------------------------------------
+subroutine met()
+ integer :: i,k
+ integer :: nn,snn,dE
+
+ do k=1,N
+!pick a random site:
+  i = INT(N*drandom())+1
+!snn=sum of neighboring spins:
+  snn = 0
+  nn=i+XNN;if(nn.gt.N)nn=nn-N;snn = snn + s(nn)
+  nn=i-XNN;if(nn.lt.1)nn=nn+N;snn = snn + s(nn)
+  nn=i+YNN;if(nn.gt.N)nn=nn-N;snn = snn + s(nn)
+  nn=i-YNN;if(nn.lt.1)nn=nn+N;snn = snn + s(nn)
+!dE=change in energy/2:
+  dE=snn*s(i)
+!flip:
+  if(dE.le.0)then
+   s(i) = -s(i) !accept
+  else if(drandom() < prob(dE))then
+   s(i) = -s(i) !accept
+  endif
+ enddo !do k=1,N: end sweep
+end subroutine met
+!--------------------------------------------------
+subroutine measure()
+ print *, E(),M()
+end subroutine measure
+!--------------------------------------------------
+integer function E()
+ integer en,sum,i,nn
+ en = 0
+ do i=1,N
+!Sum of neighboring spins: only forward nn necessary in the sum
+  sum = 0
+  nn=i+XNN;if(nn.gt.N)nn=nn-N;sum = sum + s(nn)
+  nn=i+YNN;if(nn.gt.N)nn=nn-N;sum = sum + s(nn)
+  en=en+sum*s(i)
+ enddo
+ e = -en
+end function E
+!--------------------------------------------------
+integer function M()
+ M=SUM(s)
+end function M
+!--------------------------------------------------
+real(8) function drandom()
+ integer,parameter :: a = 16807      ! a = 7**5
+ integer,parameter :: m = 2147483647 ! m = a*q+r   = 2**31-1
+ integer,parameter :: q = 127773     ! q = [m/a]
+ integer,parameter :: r = 2836       ! r = MOD(m,a)
+ real(8),parameter :: f = (1.0D0/m)
+ integer           :: p
+ real(8)           :: dr
+
+101 continue
+ p       = seed/q              !  = [seed/q]
+ seed    = a*(seed- q*p) - r*p !  = a*MOD(seed,q)-r*[seed/q] = MOD(a*seed,m)
+ if(seed .lt. 0) seed = seed + m
+ dr      = f*seed
+!Not necessary with gfortran and ifort on linux but prudent.
+!It increases CPU time ~ 10% over the whole period (ifort, 23% gfortran)
+ if( dr .le. 0.0D0 .or. dr .ge. 1.0D0) goto 101
+ drandom = dr
+end function drandom
+!--------------------------------------------------
+end module Ising2D
+!==================================================
+program     Ising2DRun
+ use Ising2D
+ implicit none
+ integer isweep
+ call init
+ do isweep = 1, nsweep
+  call met
+  call measure
+ end do
+end program Ising2DRun
+!=================================================
+!  ---------------------------------------------------------------------
+!  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+!  Physics Dept., National Technical University,
+!  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+!  
+!  This program is free software: you can redistribute it and/or modify
+!  it under the terms of the GNU General Public License as published by
+!  the Free Software Foundation, version 3 of the License.
+!  
+!  This program is distributed in the hope that it will be useful, but
+!  WITHOUT ANY WARRANTY; without even the implied warranty of
+!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+!  General Public License for more details.
+!  
+!  You should have received a copy of the GNU General Public Liense along
+!  with this program.  If not, see <http://www.gnu.org/licenses/>.
+!  -----------------------------------------------------------------------

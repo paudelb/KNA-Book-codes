@@ -1,0 +1,36 @@
+#
+# Usage:  load "plot"                                                             plots    file  "conf"
+#         f="conf.1";load "plot"                                                  plots    file  "conf.1"
+#         do for[k=1:10]{f=sprintf("conf.%d",k);load "plot";pause 1}              animates files "conf.1" ... "conf.10" every 1 sec
+#         do for[k=1:10]{f=sprintf("conf.%d",k);load "plot";system("sleep 0.05")}
+#
+#
+if(!exists("f")){f="conf";}
+L   = system(sprintf("awk 'NR==2{print $2;exit}' %s",f))
+beta= system(sprintf("awk 'NR==2{print $6;exit}' %s",f))
+beta= beta+0.0
+unset xtics;unset ytics;unset border;set size square;set pm3d map;unset colorbox
+set palette defined (-1 'red',0 'red',0 'green', 1 'green')
+set title sprintf("L = %s     {/Symbol b} = %.4f",L,beta)
+
+splot sprintf("< awk -v L=%s 'NF==1{x=n%%L;y=int((n-x)/L);n++;print x,y,$1;if( x == L-1){print \" \"}}' %s",L,f) u 1:2:3 notitle
+
+#plot sprintf("< awk -v L=%d 'NF==1{x=n%%L;y=int((n-x)/L);n++;print x,y,$1;}' %s|awk '$3== 1'",L,f) u 1:2 w p not, \
+#     sprintf("< awk -v L=%d 'NF==1{x=n%%L;y=int((n-x)/L);n++;print x,y,$1;}' %s|awk '$3==-1'",L,f) u 1:2 w p not
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

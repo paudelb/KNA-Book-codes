@@ -1,0 +1,43 @@
+#!/bin/tcsh -f 
+
+# ##################################################################
+# Set Parameters for the Run:
+set Ls     = (5 10 20)
+set betas  = (0.100 0.120 0.140 0.160 0.180 0.200 \
+              0.220 0.240 0.260 0.280 0.300)
+set seed   = 434234124
+set sweeps = 10000
+# ##################################################################
+
+
+# ##################################################################
+#
+#                   NO USER SECTION
+#
+# ##################################################################
+
+
+# Set the format of the output of the time command:
+setenv TIME "%U user %S sys %E - %e sec elapsed %P CPU ${HOSTTYPE} ${HOST} ${USER}"
+# We set the executable name and we want the run to be timed by 
+# the GNU time command, not the shell built-in
+set exe  = "/usr/bin/time ./is "
+
+foreach L     ($Ls   )
+ # in the beginning we have non thermalized run
+ set start = "-s 1 -S $seed "
+ set dir   = L$L
+ if( ! -d $dir ) mkdir $dir
+ foreach beta ($betas)
+  echo "Simulating L= $L beta= $beta"
+  set fname = L${L}b${beta}
+  ($exe -L $L -b $beta -n $sweeps $start>$fname.out)>& $fname.err
+  /bin/cp -f conf $fname.con
+  foreach e ( con out err)
+   gzip -f ${fname}.$e
+   mv   -f ${fname}.$e.gz $dir
+  end
+ # now we want to use the old config
+ set start = "-s 2 "
+ end
+end

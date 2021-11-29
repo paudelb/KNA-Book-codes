@@ -1,0 +1,105 @@
+#!/bin/bash
+#------ Default values:
+      L=10
+   beta=0.32
+nsweeps=100
+  therm=10           # If therm < 0, then use file "conf" as starting configuration
+  nconf=10
+#-------------------------------------------------------------------------------------------
+cdir=`pwd`
+ exe="${cdir}/is"    # use "./is -w" for Wolff
+prog=`basename $0`
+#-------------------------------------------------------------------------------------------
+if [[ ! -x $exe ]];then echo "${prog}: Executable $exe not found. Exiting....";exit;fi;
+#-------------------------------------------------------------------------------------------
+# If you want newlines, you have to echo "$USAGE" and not echo $USAGE
+USAGE="\
+${prog} [-L L] [-b beta] [-n nconf] [-s nsweeps] [-t ntherm] [-S start] [-w]
+  -w: use Wolff algorithm (if available)
+  -S: 1 (hot) / 0 (cold)  (if therm < 0, ignored)
+  -t: If negative, use the file conf in  L{L}b{beta}/ directory as starting configuration. If >= 0 then start from hot.
+Creates animated gif of Ising configurations. The output file is Ising2D_L{L}b{beta}nconf{nconf}nsweeps{sweeps}.gif
+Results of simulations are in L{L}b{beta}/ directory"
+#-------------------------------------------------------------------------------------------
+set -u # Undo: set +u    Treat unset variables and parameters other than the special parameters "@" and "*" as an error 
+start="-s 1 -u"
+while getopts :hL:b:n:t:s:wS: opt_char; do
+ case $opt_char in
+  L)        L=$OPTARG         ;;
+  b)     beta=$OPTARG         ;;
+  n)    nconf=$OPTARG         ;;
+  t)    therm=$OPTARG         ;;
+  s)  nsweeps=$OPTARG         ;;
+  S)    start="-s $OPTARG -u" ;;
+  w)      exe="${exe} -w " ;;
+  h)  echo "$USAGE"                                     ;exit 1 ;;
+ \?)  echo "$OPTARG is not a valid option";echo "$USAGE";exit 1 ;;
+ esac
+done
+shift $((OPTIND-1))
+#-------------------------------------------------------------------------------------------
+gif=${cdir}/Ising2D_L${L}b${beta}nconf${nconf}nsweeps${nsweeps}.gif
+rdir=${cdir}/L${L}b${beta}
+if [[ ! -d $rdir ]];then mkdir $rdir;fi
+cd $rdir
+confs=""
+echo  "Simulating: L= $L beta= $beta nsweeps_per_conf= $nsweeps nconf= $nconf"
+#------------------------------------------------------------------------------------
+if (( $therm > 0 ));then
+ echo "Thermalization: therm= $therm"
+ ${exe} -L $L -b $beta $start -n $therm   &> out.therm
+ start="-s 2"
+fi
+#------------------------------------------------------------------------------------
+if (( $therm < 0 )); then  # start from old configuration
+ if [[ ! -f conf ]]; then "${prog}: Error, file conf not found and therm= $therm < 0. Exiting...."; exit;fi
+ echo "Starting from old configuration file conf."
+ start="-s 2"
+fi
+#------------------------------------------------------------------------------------
+echo -n "Running: "
+for (( iconf=1; iconf <= $nconf; iconf++ ));do
+ echo -n "${iconf}.."
+ ${exe} -L $L -b $beta $start -n $nsweeps &> out.$iconf 
+ cp conf conf.$iconf
+ confs="${confs} conf.${iconf}"
+ start="-s 2"
+done
+echo "Done."
+#------------------------------------------------------------------------------------
+echo -n "Plotting: "
+gnuplot -d <<EOF
+set term gif animate delay 50
+set out "$gif"
+unset xtics;unset ytics;unset border;set size square;set pm3d map;unset colorbox
+set palette defined (-1 'red',0 'red',0 'green', 1 'green')
+L="${L}"
+beta="${beta}"
+set title sprintf("L = %s     {/Symbol b} = %s",L,beta)
+do for [f in "${confs}" ]{
+ splot sprintf("< awk -v L=%s 'NF==1{x=n%%L;y=int((n-x)/L);n++;print x,y,\$1;if( x == L-1){print \" \"}}' %s",L,f) u 1:2:3 notitle
+}
+set out
+EOF
+echo "Done."
+
+if [[ -f $gif ]];then
+    eog  $gif &
+fi
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

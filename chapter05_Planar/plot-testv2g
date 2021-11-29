@@ -1,0 +1,48 @@
+#!/bin/tcsh -f 
+
+rk2.csh -n -f 4 -- 10.0 30  0 0 5 5 20000 0 2; mv rk2.dat rk2.k30.dat
+rk2.csh -n -f 4 -- 10.0 0   0 0 5 5 20000 0 2; mv rk2.dat rk2.k0.dat
+rk2.csh -n -f 4 -- 10.0 0.2 0 0 5 5 20000 0 2; mv rk2.dat rk2.k0.2.dat
+rk2.csh -n -f 4 -- 10.0 1.0 0 0 5 5 20000 0 2; mv rk2.dat rk2.k1.dat
+rk2.csh -n -f 4 -- 10.0 5.0 0 0 5 5 20000 0 2; mv rk2.dat rk2.k5.dat
+rk2.csh -n -f 4 -- 10.0 10  0 0 5 5 20000 0 2; mv rk2.dat rk2.k10.dat
+rk2.csh -n -f 4 -- 10.0 20  0 0 5 5 20000 0 2; mv rk2.dat rk2.k20.dat
+gnuplot <<EOF
+set term post enhanced color eps 24
+set out "rk2_v2g_5.eps"
+set xlabel "x"
+set ylabel "y"
+plot [0:1.05][0.0:1.4] \
+"rk2.k0.dat"   u 2:3 w l t " 0.0", \
+"rk2.k0.2.dat" u 2:3 w l t " 0.2", \
+"rk2.k1.dat"   u 2:3 w l t " 1.0", \
+"rk2.k5.dat"   u 2:3 w l t " 5.0", \
+"rk2.k10.dat"  u 2:3 w l t "10.0", \
+"rk2.k20.dat"  u 2:3 w l t "20.0", \
+"rk2.k30.dat"  u 2:3 w l t "30.0"
+set out
+EOF
+\rm *.dat
+rk2.csh -n -f 3 -- 10.0 30  0 0 5 5 20000 0 2; mv rk2.dat rk2.k30.dat
+rk2.csh -n -f 3 -- 10.0 0   0 0 5 5 20000 0 2; mv rk2.dat rk2.k0.dat
+rk2.csh -n -f 3 -- 10.0 0.2 0 0 5 5 20000 0 2; mv rk2.dat rk2.k0.2.dat
+rk2.csh -n -f 3 -- 10.0 1.0 0 0 5 5 20000 0 2; mv rk2.dat rk2.k1.dat
+rk2.csh -n -f 3 -- 10.0 5.0 0 0 5 5 20000 0 2; mv rk2.dat rk2.k5.dat
+rk2.csh -n -f 3 -- 10.0 10  0 0 5 5 20000 0 2; mv rk2.dat rk2.k10.dat
+rk2.csh -n -f 3 -- 10.0 20  0 0 5 5 20000 0 2; mv rk2.dat rk2.k20.dat
+gnuplot <<EOF
+set term post enhanced color eps 24
+set out "rk2_vg_5.eps"
+set xlabel "x"
+set ylabel "y"
+plot [0:1.05][0.0:1.4] \
+"rk2.k0.dat"   u 2:3 w l t " 0.0", \
+"rk2.k0.2.dat" u 2:3 w l t " 0.2", \
+"rk2.k1.dat"   u 2:3 w l t " 1.0", \
+"rk2.k5.dat"   u 2:3 w l t " 5.0", \
+"rk2.k10.dat"  u 2:3 w l t "10.0", \
+"rk2.k20.dat"  u 2:3 w l t "20.0", \
+"rk2.k30.dat"  u 2:3 w l t "30.0"
+set out
+EOF
+\rm *.dat

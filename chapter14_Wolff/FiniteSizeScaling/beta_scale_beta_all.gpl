@@ -1,0 +1,68 @@
+# First runs the script beta_scale_beta.gpl
+# then we plot the last fitting functions for the largest L plotted
+bc = 0.5*log(1.0+sqrt(2.0));
+unset log
+set   log
+set fit errorvariables
+set macros
+set key bottom left
+#set autoscale
+
+Ls    = "40 60 80 100 120 140 160 200 500";
+NLs   = words(Ls);
+LL(i) = word(Ls,i);
+cplot1(i) = sprintf("<grep 'm %s ' all|awk -v L=%s 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc ,$4,$5}'",LL(i),LL(i));
+cplot2(i) = sprintf("<grep 'm %s ' all|awk -v L=%s 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc*L,$4,$5}'",LL(i),LL(i));
+
+# ------------------------------------------------------------
+set key top left
+set ylabel "<m>"
+set term qt 1
+set xlabel "|t| (t<0)"
+set ytics (0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0)
+plot for[i=1:NLs] cplot1(i) u 1:2:3 w e t sprintf("L=%s",LL(i))
+replot  (x>=(0.1*x1min)&&x<=(10*x1max))?(d1*(x)**( b1)):(1/0) notit
+#replot  (d2*(x/LL(NLs))**(-b2)) notit 
+set term post eps enha color 24
+set out  "beta_scale_beta_all.eps"
+replot
+set out
+set term qt 1
+replot
+
+# ------------------------------------------------------------
+set key top right
+set ylabel "<m>"
+set term qt 2
+set ytics autofreq
+set xlabel "|t| L^{1/{/Symbol n}} (t>0)"
+plot for[i=1:NLs] cplot2(i) u 1:2:3 w e t sprintf("L=%s",LL(i))
+replot  (x>=(0.1*x2min*LL(NLs))&&x<=(10*x2max*LL(NLs)))?(d2*(x/LL(NLs))**(-b2)):(1/0) notit
+#replot  (d2*(x/LL(NLs))**(-b2)) notit 
+set term post eps enha color 24
+set out  "beta_scale_beta_all_2.eps"
+replot
+set out
+set term qt 2
+replot
+
+set ytics autofreq
+set key top right
+
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

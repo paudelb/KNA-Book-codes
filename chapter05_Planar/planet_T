@@ -1,0 +1,29 @@
+# Planetary motion measurements of period. We used the commands:
+#  rk2.csh -n -f 5 -- -10 0 1 0 0 <v_0x> 40000 0 <time>
+#  planet_meas.awk rk2.dat > hi
+#  grep T hi
+#  grep A hi
+#  grep B hi
+#
+# v_0x   T/2      2 a
+# ===================
+  3.2   1.030   2.049
+  3.4   1.281   2.370
+  3.6   1.682   2.841
+  3.8   2.396   3.597
+  4.0   3.927   5.000
+  4.1   5.514   6.270
+  4.2   8.665   8.475
+  4.3  16.931  13.245
+  4.3  28.088  18.561
+  4.38 42.652  24.522
+  4.40 61.359  31.250
+  4.42 99.526  43.141
+# Check Kepler law by: T^2 = (4 pi^2)/(G M) r^3 where here G M= 10
+# grep -v # planet_T|awk '{print ($3/2)^3,(2*$2)^2}'  | fit-straight-line -n
+# slope = 3.94777(1)  (4 pi^2/10) = 3.9478 41760
+# grep -v # planet_T|awk '{print log($3/2),log(2*$2)}'| fit-straight-line -n
+# slope =  1.50006(3)  intercept: 0.68642(5)
+# In gnuplot:
+# plot [:12000] "planet_T" u (($3/2)**3):((2*$2)**2) notit , ((4*pi**2)/10)*x notit
+

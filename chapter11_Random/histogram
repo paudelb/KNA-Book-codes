@@ -1,0 +1,78 @@
+#!/usr/bin/awk -f 
+
+BEGIN{
+
+  if( e== "") e=0.5; #default: centered bin
+  if( c== "") c=1; #Column 1 is the default
+  m= 1.0e132;
+  M=-1.0e132;
+  if( f=="" ) f=1; #multiplication factor to deal with non-integers;
+                   #1/f is the bin width
+  err=0;
+  if( ARGV[1] == "-h"){
+    err++;
+    print "Usage: histogram [-v c=<field position>] [-v f=<factor>] [-v e=<epsilon>] <file>" > "/dev/stderr";
+    print "       <field position>: Column in <file> to be histogrammed"  > "/dev/stderr";
+    print "       <factor>        : dx = 1/<factor> is the bin width"  > "/dev/stderr";
+    print " "> "/dev/stderr";
+    print "*********Use w hist to plot with gnuplot*********"> "/dev/stderr";
+    print " "> "/dev/stderr";
+    print "Output:  x  Η  h  rho"> "/dev/stderr";
+    print "x: value of data  Η: no data in interval [x-(1-e)binw,x+(1-e)binw]"> "/dev/stderr";
+    print "h: relative frequency H/<No data>"> "/dev/stderr";
+    print "rho: such that sum(rho * dx) = sum(rho/<factor>) = 1"> "/dev/stderr";
+    print "Defaults:   c= ",c,"f=",f,"e=",e;
+    exit(1);
+  }
+}
+
+
+{
+# put to the bin corresponding to the small close integer:
+  $c = ($c>=0)?int($c*f):(int($c*f)-1);
+  n[$c]++;
+  m=(m<$c)?m:$c;
+  M=(M>$c)?M:$c;
+
+}
+
+
+END{
+
+  if( err  ) exit(1);
+  for(i=m;i<=M;i++)
+    sum += n[i];
+  sum=(sum>0)?sum:1;
+  sum1 = sum / f;
+  print "# ########################################################################";
+  print "# Histogram: File=",FILENAME;
+  print "# <field position>=",c,"binw=",1/f,"e=",e,"No data=",sum;
+  print "# x: data value";
+  print "# H: no .data in [x-(1-e)binw,x+(1-e)binw]=[x-"(1-e)" binw,x+"(1-e)" binw]";
+  print "# h: relative frequency H/<No data>";
+  print "# rho: normalized data s.t. int_0^infty rho(x) dx = 1";
+  print "# x     Η       h        rho";
+  print "# ------------------------------------------------------------------------";
+  for(i=m;i<=M;i++)
+    if( n[i]>0)
+	printf "%28.20g      %28.20g      %28.20g      %28.20g\n", (i+e)/f,n[i],n[i]/sum,n[i]/sum1;
+
+}
+
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

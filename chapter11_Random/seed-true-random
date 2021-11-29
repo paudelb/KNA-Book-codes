@@ -1,0 +1,79 @@
+#!/bin/tcsh -f 
+
+set col    = 1
+set n      = 1
+set limits = 0 # whether to check for limits
+set min    = 1 #these should be the range set in random.org, includsive, see http://www.random.org/integers/
+set max    = 1000000000
+set cdir = $cwd
+set prog = `basename $0`
+set argv = ( `getopt c:m:M:n:h $argv`)
+while ( "$argv[1]" != "--")
+ switch ("$argv[1]")
+  case -n:
+   set n      = $argv[2]
+   shift
+   shift
+   breaksw
+  case -c:
+   set col    = $argv[2]
+   shift
+   shift
+   breaksw
+  case -m:
+   set limits = 1
+   set min    = $argv[2]
+   shift
+   shift
+   breaksw
+  case -M:
+   set limits = 1
+   set max    = $argv[2]
+   shift
+   shift
+   breaksw
+  case -h:
+   goto usage
+   shift
+   breaksw
+ endsw
+end   # while
+shift # get rid of --
+
+if( $#argv < 0 )then
+usage:
+ cat << EOF > /dev/stderr
+Usage: $prog [-m <min>] [-M <max>] [-n <number of seeds>] [-c <col>]
+ -m <min>: sets    <min> the minimum number returned. Default: 1             (if min     < 0 => min=0 )
+ -M <max>: sets    <max> the maximum number returned. Default: 1,000,000,000 (if max-min < 1 => max-min=1)
+ -n <num>: returns <num> random numbers.              Default: 1
+ -c <col>: formats numbers in <col> columns           Default: 1
+ Without options it returns one integer random number 1<= r <= 1,000,000,000 from random.org
+ Needs internet, wget
+ See http://www.random.org/integers/
+EOF
+ exit(1)
+endif
+
+if($limits)then 
+ wget -o /dev/null -O - "http://www.random.org/integers/?num=${n}&min=1&max=1000000000&col=${col}&base=10&format=plain&rnd=new"|awk -v m=$min -v M=$max 'BEGIN{if(m<0){m=0};dif=(M>m)?(M-m):(m-M);dif++}{for(i=1;i<=NF;i++){$i= m+($i%dif)};print}'| column -t
+else
+ wget -o /dev/null -O - "http://www.random.org/integers/?num=${n}&min=1&max=1000000000&col=${col}&base=10&format=plain&rnd=new"| column -t
+endif
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

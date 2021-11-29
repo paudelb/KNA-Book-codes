@@ -1,0 +1,46 @@
+# Usage:
+# Ls = "40 60 80 100 120 140 160 200 500 1000"
+# bc = bcc; nu = 1 ; load "scale_alpha.gpl";
+# Ls: the values of L used in te collapse
+# bc: the critical temperature used in the calculation of t=(beta_c-beta)/beta_c
+# nu: the exponent used in the calculation of x=L^{1/nu} t
+
+## for the plot in the text see: load "scale_gamma_eps.gpl"
+
+bcc   = 0.5*log(1.0+sqrt(2.0)); #the exact critical temperature (use bc=bcc is you wish)
+NLs   = words(Ls);  # The number of lattice sizes used in the calculation
+LL(i) = word (Ls,i);# Returns the i_th lattice size
+cplot(i) = sprintf("<grep 'e %s ' all|sort -k 3,3g|awk -v L=%s -v bc=%f -v nu=%f -v gnu=%f '($6>0 &&(($7/$6)<0.01)){print L^(1.0/nu)*(bc-$3)/bc,$6/(log(L)+gnu),$7/(log(L)+gnu)}'",LL(i),LL(i),bc,nu,gnu);
+
+set macros
+set term qt enhanced
+
+set title sprintf("{/Symbol b}_c= %f {/Symbol n}= %f",bc,nu)
+set xlabel "x=L^{1/{/Symbol n}} t"
+set ylabel "F_{{c}}(x) = c({/Symbol b},L)/log(L)"
+plot for[i=1:NLs] cplot(i) u 1:2:3 w e t sprintf("L=%s",LL(i))
+
+set key top left
+set term post eps enha color 24
+set out  "scale_alpha.eps"     
+set title ""
+replot
+set out
+set term qt enha
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

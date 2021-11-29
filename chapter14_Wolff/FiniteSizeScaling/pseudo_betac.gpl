@@ -1,0 +1,62 @@
+# First runs the script beta_scale_beta.gpl
+# then we plot the last fitting functions for the largest L plotted
+bcc = 0.5*log(1.0+sqrt(2.0));
+unset log
+#set   log
+set fit errorvariables
+set macros
+set key top right
+#set autoscale
+
+chibc = "\"< awk 'NF==9{print 1/$1,$2,$3}' all-max\""
+f(x) = bc + cc*x**inu
+bc=0.44; cc=-0.4;inu=1;
+fit f(x) @chibc using 1:2:3 via bc,cc,inu
+set term qt enhanced 1
+set xlabel "1/L"
+set ylabel "{/Symbol b}_c(L)"
+plot [0:0.03] @chibc using 1:2:3 w e notit, \
+     f(x) t sprintf("fit to: {/Symbol b}_c - c (1/L)^{1/{/Symbol n}}\n\n{/Symbol 1/n} =       %.3f  +/-  %.3f\n{/Symbol b}_c = %.5f +/- %.5f",inu,inu_err,bc,bc_err),\
+     bcc notit
+
+
+set term post enha eps color 24
+set out "pseudo_betac_chi.eps"
+replot
+set out
+set term qt enha 2
+
+cbcmacro = "\"< awk 'NF==9{print 1/$1,$6,$7}' all-max\""
+g(x) = cbc + ccc*x**icnu
+cbc=0.44; ccc=-0.1;icnu=1;
+fit g(x) @cbcmacro using 1:2:3 via cbc,ccc,icnu
+set term qt enhanced
+set xlabel "1/L"
+set ylabel "{/Symbol b}'_c(L)"
+plot [0:0.03][0.435:0.4412] @cbcmacro using 1:2:3 w e notit, \
+     g(x) t sprintf("fit to: {/Symbol b}_c - c (1/L)^{1/{/Symbol n}}\n\n{/Symbol 1/n} =       %.2f  +/-  %.2f\n{/Symbol b}_c = %.5f +/- %.5f",icnu,icnu_err,cbc,cbc_err),\
+     bcc notit
+
+
+set term post enha eps color 24
+set out "pseudo_betac_c.eps"
+replot
+set out
+set term qt enha 1
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

@@ -1,0 +1,103 @@
+\documentclass[a4paper,titlepage,12pt]{article}
+%\documentclass[a4paper,oneside,titlepage,12pt]{article}
+
+% AMS must be **before** \usepackage{fontspec}
+%\usepackage{amssymb}
+%\usepackage{amsfonts}
+%\usepackage{amsthm}
+%\usepackage{amsmath}
+%ελληνικό hyphenation
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\usepackage{xgreek}
+\newcommand {\vev}[1]{\left\langle #1 \right\rangle}
+\newcommand {\rf}[1]{(\ref{#1})}
+%η γραμματοσειρά
+%\setmainfont[Mapping=tex-text]{Arial}
+%\setmainfont[Mapping=tex-text]{DejaVuSans}
+%\setmainfont[Kerning=On,Mapping=tex-text]{Linux Libertine O}
+\setmainfont[Mapping=tex-text]{GFS Didot}
+%πακέτο για εισαγωγή εικόνων
+\usepackage{graphicx}
+
+%\title{Τίτλος}
+%\author{Ονοματεπώνυμο}
+%\date{} %default: no date
+
+\begin{document}
+%\maketitle
+\section{Πρόβλημα}
+
+Στο πρόβλημα του εκκρεμούς με απόσβεση και εξωτερική περιοδική δύναμη
+να πάρετε:
+$$
+\omega_0 = 1\, , \quad
+\omega   = 2\, , \quad
+\gamma   = 0.2
+$$ 
+και να μελετήσετε την κίνηση του εκκρεμούς όταν το πλάτος (ανάλογο
+της δύναμης) $A$ μεταβάλλεται στο διάστημα $[0.2,5.0]$. Να πάρετε
+διακριτές τιμές του $A$ χωρίζοντας το παραπάνω διάστημα σε διαστήματα πλάτους
+$\delta A=0.002$. Για κάθε τιμή του $A$, να καταχωρήσετε σε ένα αρχείο
+την τιμή του $A$, της γωνιακής θέσης και γωνιακής ταχύτητας του εκκρεμούς όταν
+$t_k=k \pi$ με $k=k_{trans},k_{trans}+ 1, k_{trans}+2, \ldots, k_{max}$:
+$$
+A\qquad  \theta(t_k)\qquad  \dot\theta(t_k)
+$$
+Η επιλογή του $k_{trans}$ γίνεται έτσι ώστε να παραλειφθεί η
+μεταβατική συμπεριφορά (transient behavior) και να είστε βέβαιοι πως
+μελετάτε τη μόνιμη κατάσταση του εκκρεμούς.
+Μπορείτε να πάρετε $k_{max}=500$, $k_{trans}=400$, $t_i=0$,
+$t_f=500\pi$, και να
+χωρίσετε τα διαστήματα $[t_k,t_k+\pi]$ σε 50 υποδιαστήματα.
+Διαλέξτε $\theta_0=3.1$, $\dot\theta_0=0$.
+
+\begin{enumerate}
+ \item Φτιάξτε τη γραφική παράσταση του διαγράμματος διακλάδωσης που
+   προκύπτει τοποθετώντας σε διάγραμμα τα σημεία $(A,\theta(t_k))$.
+ \item Επαναλάβατε τοποθετώντας σε διάγραμμα τα σημεία
+   $(A,\dot\theta(t_k))$.
+ \item Εξετάστε αν τα αποτελέσματά σας εξαρτώνται από την επιλογή των
+   $\theta_0$, $\dot\theta_0$ επαναλαμβάνοντας για διαφορετικές τιμές,
+   λ.χ.  $\theta_0=0$, $\dot\theta_0=1$.
+ \item Μελετήστε την περιοχή που ξεκινάει η χαοτική συμπεριφορά: Πάρτε
+   $A\in [1.0000,1.0400]$ με $\delta A=0.0001$ και $A\in
+   [4.4300,4.4500]$ με $\delta A=0.0001$ και βρείτε με τη δεδομένη
+   ακρίβεια την τιμή $A_c$ που ξεκινάει η χαοτική συμπεριφορά.
+ \item Στη συνέχεια να αναπαραστήστε γραφικά τα σημεία
+   $(\theta(t_k),\dot\theta(t_k))$ για $A =  1.034, 1.040, 1.080,
+   1.400, 4.450, 4.600$. Τοποθετήστε 2000 σημεία για κάθε τιμή του $A$
+   και σχολιάστε πότε η χαοτική συμπεριφορά είναι εντονότερη.
+\end{enumerate}
+ 
+\section{Πρόβλημα}
+
+Στο πρόβλημα του εκκρεμούς με απόσβεση και εξωτερική περιοδική δύναμη
+να πάρετε:
+$$
+\omega_0 = 1\, , \quad
+\omega   = 2\, , \quad
+\gamma   = 0.2
+$$ 
+Η κίνηση του συστήματος για $A=0.60$, $A=0.75$ και $A=0.85$ είναι
+περιοδική μετά από τη μεταβατική συμπεριφορά (transient behavior). Να
+μετρήσετε την περίοδο της κίνησης με ακρίβεια 3 σημαντικών δεκαδικών
+ψηφίων σε κάθε περίπτωση και να τη συγκρίνετε με την φυσική περίοδο
+του εκκρεμούς και την περίοδο της εξωτερικής δύναμης. Ως αρχικές
+συνθήκες να πάρετε $(\theta_0,\dot\theta_0)= $ $(3.1,0.0)$,
+$(2.5,0.0)$, $(2.0,0.0)$, $(1.0,0.0)$, $(0.2,0.0)$, $(0.0,1.0)$,
+$(0.0,3.0)$, $(0.0,6.0)$ και να επιβεβαιώσετε πως η περίοδος είναι
+ανεξάρτητη των αρχικών συνθηκών.
+ 
+%\begin{displaymath}
+%\sum_{n = 0}^\infty {e^x}
+%\end{displaymath}
+% %%%%%%%%%%%%%%%%%%%%%%%% Figure %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}[tbp]
+% \centering % \begin{center}/\end{center} takes some additional vertical space
+% \includegraphics[width=7.4cm]{file.eps}
+%     \caption{\label{f:1} }
+% \end{figure}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

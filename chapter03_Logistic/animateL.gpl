@@ -1,0 +1,27 @@
+# Usage: In order to animate data in trj.dat to the following:
+# gnuplot> file  = "trj.dat"
+# gnuplot> t0    = 0
+# gnuplot> tf    = 10
+# gnuplot> dt    = 1  #smaller dt for sloer animation
+# gnuplot> r     = 2.8
+# gnuplot> set xrange [-1:1];set yrange [-1:1]
+# gnuplot> load "animateL.gpl"
+
+set macros
+set size square
+# -----------------------------
+t0 = t0 + dt
+command = "awk -v t=".sprintf("%f",t0)." '$1<t{print $2}' ".file."|tail -n 1"
+x0 = `@command`
+command = "awk -v t=".sprintf("%f",t0)." '$1<t{print $3}' ".file."|tail -n 1"
+y0 = `@command`
+set  arrow 1 from 0,0 to x0,y0
+# show arrow 1
+# set title "t= ".sprintf("%f (x,y) = %s",t0,axy)
+set title "t= ".sprintf("%d (x,y)= (%f,%f)",t0,x0,y0)
+plot file \
+ using 2:($1<= t0 ? $3: 1/0) with lines notitle, \
+ r*x*(1-x) notit, x notit
+
+# pause sleep
+if(t0<tf) reread

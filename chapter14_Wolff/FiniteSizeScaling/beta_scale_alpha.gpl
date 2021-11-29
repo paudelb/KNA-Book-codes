@@ -1,0 +1,87 @@
+bc = 0.5*log(1.0+sqrt(2.0));
+unset log
+set   log x
+set fit errorvariables
+set macros
+set key bottom left
+# set term qt 1
+# # ---------------------------------------------------------------
+# # L=40;
+# x1min=0.0400;x1max=0.130;
+# x2min=0.0742;x2max=0.151;
+# # ---------------------------------------------------------------
+# chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+# chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+# command1 = "\"<grep 'e ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+# command2 = "\"<grep 'e ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+# g1=1.75;g2=1.75;
+# #fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+# #fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+# set xlabel "t"
+# plot \
+#      @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+#      @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c"#,\
+# #     chi1(x) t "{/Symbol g/n}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+# #     chi2(x) t "{/Symbol g/n}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+
+# setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+# @setconst;
+# setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+# @setconst;
+# set term post eps enha color 24
+# set out  "beta_scale_alpha_".L.".eps"
+# replot
+# set out
+# set term qt 1
+# replot
+# # ---------------------------------------------------------------
+
+
+set term qt 2
+cplot(L) = sprintf("<grep 'e %s ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'",L);
+Ls = "40 60 80 100 120 140 160 200 500";
+NLs = words(Ls);
+LL(i) = word(Ls,i)
+set xlabel "|t| (t<0)"
+set ylabel "c"
+plot for[i=1:NLs] cplot(LL(i)) u 1:2:3 w e t sprintf("L=%s",LL(i))
+set term post eps enha color 24
+set out  "beta_scale_alpha_all.eps"
+replot
+set out
+set term qt 2
+replot
+
+
+set term qt 1
+cplot(L) = sprintf("<grep 'e %s ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc&&$7<0.1*$6{print  (bc-$3)/bc,$6,$7}'",L);
+Ls = "40 60 80 100 120 140 160 200 500";
+NLs = words(Ls);
+LL(i) = word(Ls,i)
+set xlabel "|t| (t>0)"
+set ylabel "c"
+plot for[i=1:NLs] cplot(LL(i)) u 1:2:3 w e t sprintf("L=%s",LL(i))
+set term post eps enha color 24
+set out  "beta_scale_alpha_all_2.eps"
+replot
+set out
+set term qt 1
+replot
+
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

@@ -1,0 +1,68 @@
+# Usage:
+# Ls = "40 60 80 100 120 140 160 200 500 1000"
+# bc = bcc; nu = 1 ; bnu = 0.125; load "scale_gamma_eps.gpl";
+# Ls: the values of L used in te collapse
+# bc: the critical temperature used in the calculation of t=(beta_c-beta)/beta_c
+# nu: the exponent used in the calculation of x=L^{1/nu} t
+# bnu: the exponent used in the calculation of F_chi = L^{-bnu} chi(beta,L)
+
+## for the plot in the text see: 
+
+bcc   = 0.5*log(1.0+sqrt(2.0)); #the exact critical temperature (use bc=bcc is you wish)
+NLs   = words(Ls);  # The number of lattice sizes used in the calculation
+LL(i) = word (Ls,i);# Returns the i_th lattice size
+cplot(i) = sprintf("<grep 'm %s ' all|sort -k 3,3g|awk -v L=%s -v bc=%f -v nu=%f -v bnu=%f '($6>0 &&(($7/$6)<0.01)){print L^(1.0/nu)*(bc-$3)/bc,L^(bnu)*$4,L^(bnu)*$5}'",LL(i),LL(i),bc,nu,bnu);
+
+set macros
+set term qt enhanced
+#set title sprintf("{/Symbol b}_c= %f {/Symbol n}= %f {/Symbol g/n}= %f",bc,nu,gnu) #comment if eps
+set term post eps enha color solid 18 #uncomment if saving to ps
+set out  "scale_beta.eps"      #uncomment if saving to eps
+set xrange [-5:31]
+set yrange [0:1.52]
+set multiplot
+set origin 0.0,0.0
+set size 1.0,1.0
+set xlabel "x=L^{1/{/Symbol n}} t"
+set ylabel "F_{{m}}(x) = L^{{/Symbol b/n}}<m>({/Symbol b},L)"
+plot for[i=1:NLs] cplot(i) u 1:2:3 w e t sprintf("L=%s",LL(i))
+
+set origin 0.25,0.3
+set size 0.5,0.5
+set xrange [-1  :1  ]
+set yrange [0.65:1.24]
+set ytics (0.60, 0.80, 1.00, 1.20) font "Helvetica,10"
+set xtics (-1, -0.5,0, 0.5, 1)         font "Helvetica,10"
+set title ""
+set xlabel ""
+set ylabel ""
+set key off
+plot for[i=1:NLs] cplot(i) u 1:2:3 w e t sprintf("L=%s",LL(i))
+
+unset multiplot
+
+set out
+set term qt enhanced
+set xrange [*:*]
+set yrange [*:*]
+set xtics autofreq
+set ytics autofreq
+set key on
+reset
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

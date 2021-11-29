@@ -1,0 +1,254 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      7109,        245]
+NotebookOptionsPosition[      6188,        209]
+NotebookOutlinePosition[      6646,        227]
+CellTagsIndexPosition[      6603,        224]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"sol", " ", "=", " ", 
+  RowBox[{
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"vr", " ", "\[Equal]", " ", 
+        RowBox[{
+         RowBox[{"vx", " ", 
+          RowBox[{"Cos", "[", "\[Theta]", "]"}]}], " ", "+", " ", 
+         RowBox[{"vy", " ", 
+          RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"v\[Theta]", " ", "\[Equal]", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "vx"}], " ", 
+          RowBox[{"Sin", "[", "\[Theta]", "]"}]}], "+", 
+         RowBox[{"vy", " ", 
+          RowBox[{"Cos", "[", "\[Theta]", "]"}]}]}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"vx", ",", "vy"}], "}"}]}], "]"}], "//", 
+   "Simplify"}]}]], "Input",
+ CellChangeTimes->{{3.47460692457589*^9, 3.474607019735244*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"vx", "\[Rule]", 
+     RowBox[{
+      RowBox[{"vr", " ", 
+       RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+      RowBox[{"v\[Theta]", " ", 
+       RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}], ",", 
+    RowBox[{"vy", "\[Rule]", 
+     RowBox[{
+      RowBox[{"v\[Theta]", " ", 
+       RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "+", 
+      RowBox[{"vr", " ", 
+       RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}]}], "}"}], "}"}]], "Output",\
+
+ CellChangeTimes->{{3.474607002106761*^9, 3.474607020581114*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"sol1", " ", "=", " ", 
+  RowBox[{"sol", " ", "/.", " ", 
+   RowBox[{"vr", "\[Rule]", " ", 
+    RowBox[{"-", "vr"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.474607023054551*^9, 3.474607027626523*^9}, {
+  3.474607115924991*^9, 3.474607117009845*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"vx", "\[Rule]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", "vr"}], " ", 
+       RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+      RowBox[{"v\[Theta]", " ", 
+       RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}], ",", 
+    RowBox[{"vy", "\[Rule]", 
+     RowBox[{
+      RowBox[{"v\[Theta]", " ", 
+       RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+      RowBox[{"vr", " ", 
+       RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}]}], "}"}], "}"}]], "Output",\
+
+ CellChangeTimes->{3.474607028253253*^9, 3.474607118445849*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"sol2", " ", "=", " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"vr", " ", "\[Rule]", "  ", 
+     RowBox[{
+      RowBox[{"vx", " ", 
+       RowBox[{"Cos", "[", "\[Theta]", "]"}]}], " ", "+", " ", 
+      RowBox[{"vy", " ", 
+       RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}], ",", 
+    RowBox[{"v\[Theta]", " ", "\[Rule]", "  ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", "vx"}], " ", 
+       RowBox[{"Sin", "[", "\[Theta]", "]"}]}], "+", 
+      RowBox[{"vy", " ", 
+       RowBox[{"Cos", "[", "\[Theta]", "]"}]}]}]}]}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.474607120262631*^9, 3.474607142077776*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"vr", "\[Rule]", 
+    RowBox[{
+     RowBox[{"vx", " ", 
+      RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "+", 
+     RowBox[{"vy", " ", 
+      RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}], ",", 
+   RowBox[{"v\[Theta]", "\[Rule]", 
+    RowBox[{
+     RowBox[{"vy", " ", 
+      RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+     RowBox[{"vx", " ", 
+      RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}]}], "}"}]], "Output",
+ CellChangeTimes->{3.474607143446867*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"pars", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"vx", "\[Rule]", " ", "1"}], ",", " ", 
+     RowBox[{"vy", " ", "\[Rule]", " ", "1"}], ",", " ", 
+     RowBox[{"\[Theta]", "\[Rule]", " ", "\[Pi]"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"vr", ",", "v\[Theta]"}], "}"}], "/.", " ", "sol2"}], " ", "/.", 
+  " ", "pars"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", "vr"}], ",", "v\[Theta]"}], "}"}], "/.", " ", "sol2"}], " ",
+   "/.", "pars"}]}], "Input",
+ CellChangeTimes->{{3.474608068415196*^9, 3.474608134831451*^9}, {
+  3.474608175522553*^9, 3.474608189713585*^9}, {3.474608283706698*^9, 
+  3.474608330916512*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "1"}], ",", 
+   RowBox[{"-", "1"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.474608107585096*^9, 3.474608136330402*^9}, {
+  3.474608177247974*^9, 3.474608190581011*^9}, {3.474608285851195*^9, 
+  3.474608332066831*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1", ",", 
+   RowBox[{"-", "1"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.474608107585096*^9, 3.474608136330402*^9}, {
+  3.474608177247974*^9, 3.474608190581011*^9}, {3.474608285851195*^9, 
+  3.474608332069554*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"-", "vr"}], ",", "v\[Theta]"}], "}"}], "/.", " ", 
+  "sol2"}]], "Input",
+ CellChangeTimes->{{3.474608247209203*^9, 3.474608275198749*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"-", "vx"}], " ", 
+     RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+    RowBox[{"vy", " ", 
+     RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], ",", 
+   RowBox[{
+    RowBox[{"vy", " ", 
+     RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+    RowBox[{"vx", " ", 
+     RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}]}], "}"}]], "Output",
+ CellChangeTimes->{3.474608244443145*^9, 3.474608276232924*^9}]
+}, Open  ]]
+},
+WindowSize->{978, 723},
+WindowMargins->{{0, Automatic}, {Automatic, 24}},
+ShowSelection->True,
+Magnification:>FEPrivate`If[
+  FEPrivate`Equal[FEPrivate`$VersionNumber, 6.], 1.25, 1.25 Inherited],
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 878, 24, 89, "Input"],
+Cell[1448, 48, 575, 17, 38, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2060, 70, 270, 6, 38, "Input"],
+Cell[2333, 78, 596, 18, 38, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2966, 101, 633, 17, 38, "Input"],
+Cell[3602, 120, 506, 15, 38, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4145, 140, 777, 22, 89, "Input"],
+Cell[4925, 164, 275, 7, 38, "Output"],
+Cell[5203, 173, 256, 6, 38, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5496, 184, 203, 6, 38, "Input"],
+Cell[5702, 192, 470, 14, 38, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

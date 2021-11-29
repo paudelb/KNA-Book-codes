@@ -1,0 +1,65 @@
+bc = 0.5*log(1.0+sqrt(2.0));
+set fit errorvariables
+set macros
+bplot(L) = sprintf("<grep '^%s ' allem|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} ($12/$11)<0.002{print $2,1.0-$11/3.0,$12}'",L);
+Ls = "40 60 80 100 120 140 160 200 500 1000";
+#Ls = "100 120 140 160 200 500 1000";
+NLs = words(Ls);
+LL(i) = word(Ls,i)
+
+set palette rgbformulae 3,11,16
+set xlabel "{/Symbol b}"
+set ylabel "U"
+set term post eps enha color solid 18
+set out "binder_cross.eps"
+set multiplot
+set key right top # font  "Helvetica,10"
+set xrange [0.357:0.503]
+set yrange [-0.0001:0.69]
+set origin 0.0,0.0
+set size 1.0,1.0
+set xlabel "{/Symbol b}"
+set ylabel "U"
+plot   for[i=1:NLs] bplot(LL(i)) u 1:2:3 w e t sprintf("L=%s",LL(i))
+replot for[i=1:NLs] bplot(LL(i)) u 1:2:3 smooth unique notit
+replot 2.0/3.0 w lines lt 1 t "2/3" 
+
+set origin 0.09,0.45
+set size 0.4,0.4
+set xrange [0.4392:0.4427]
+set yrange [0.5998:0.6210]
+set xtics (0.4395,0.4405,0.4415,0.4425)  font "Helvetica,10"
+set ytics (0.60,0.61,0.62)               font "Helvetica,10"
+set title ""
+set xlabel ""
+set ylabel ""
+set key off
+plot   for[i=1:NLs] bplot(LL(i)) u 1:2:3 w e notit
+replot for[i=1:NLs] bplot(LL(i)) u 1:2:3 smooth unique notit,  0.610690 notit
+unset multiplot
+
+set out
+set term qt enhanced
+set xrange [*:*]
+set yrange [*:*]
+set xtics autofreq
+set ytics autofreq
+set key on
+reset
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

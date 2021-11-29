@@ -1,0 +1,12 @@
+# Study the function b(theta) for different velocities.
+# se set theta=fixed for 3-digit accuracy
+# theta  v  b 
+# ----------------------
+2.50 0.268 0.25
+2.50 0.520 0.20
+2.50 0.780 0.16
+2.50 1.340 0.10
+2.50 2.280 0.05
+2.50 3.520 0.025
+2.50 5.040 0.0125
+

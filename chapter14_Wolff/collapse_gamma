@@ -1,0 +1,85 @@
+#!/bin/awk -f 
+
+BEGIN{
+# -----------------------------------------------------------
+#   Parameters set by user:
+    bcc     = 0.5*log(1+sqrt(2.)); #exact ctitoca temp.
+    beta_min   = bcc- 0.1 ; beta_max = bcc + 0.1; dbeta = 0.1;
+    nu_min  = 0.9  ; nu_max  = 1.1  ; dnu = 0.1;
+    gnu_min = 1.74 ; gnu_max = 1.75 ; dgnu = 0.1;
+    xmin    = -4.0 ; xmax    = 4.0  ;
+    Ls2collapse = "100 200 500";
+# -----------------------------------------------------------
+}
+
+# -----------------------------------------------------------
+#   Read Data:
+/^m/{
+    L = $2 ; beta = $3 ; chi = $6 ; dchi = $7;
+    chis [L,beta] = chi;
+    dchis[L,beta] = dchi; 
+
+}
+
+
+# -----------------------------------------------------------
+#                  CALCULATE
+# -----------------------------------------------------------
+END{
+    nLs = split(Ls2collapse,Ls," "); #get values of Ls from user Ls[i] is value of L
+    print "# --------------------------------------------------------------------------------";  
+    print "# beta_min = ",beta_min,"beta_max = ",beta_max,"dbeta = ",dbeta;
+    print "# nu_min = ",nu_min,"nu_max = ",nu_max,"dnu = ",dnu;
+    print "# gnu_min = ",gnu_min,"gnu_max = ",gnu_max,"dgnu = ",dgnu;
+    for( betac = beta_min ; betac <= beta_max ; betac += dbeta)
+    	for( nu = nu_min ; nu <= nu_max ; nu += dnu)
+    	    for( gnu = gnu_min ; gnu <= gnu_max ; gnu += dgnu){
+		print beta,nu,gnu,chi2f(Ls,nLs,chis,dchis,betac,nu,gnu,xmin,xmax);
+	#	print "hello";
+	    }
+	
+    
+}
+
+function chi2f(Ls,nLs,chis,dchis,betac,nu,gnu,xmin,xmax){
+    chi2 = 0.0;
+
+# Compute the scaling variables:
+    for( L_beta in chis ){
+	split(L_beta,Lbeta,SUBSEP);
+	L = Lbeta[1]; beta = Lbeta[2];
+	t [L,beta] = L^(1/nu)* (betac-beta)/betac;
+	F [L,beta] = L^(-gnu)* chis[L_beta];
+	dF[L,beta] = L^(-gnu)*dchis[L_beta];
+    }
+    
+    for( i=1; i<= nLs; i++){
+	Li = Ls[i];
+	for (j = 1 ; j <= nLs; j++){
+	Lj = Ls[j];
+	if( j == i ) continue;
+#	print "chi2:",i,j,Li,Lj;
+	}
+    }
+
+#   delete t, ... all used arrays 
+    return "chi2 result";
+
+}
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

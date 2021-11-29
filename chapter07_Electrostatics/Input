@@ -1,0 +1,12 @@
+2                    N: Number of Charges 
+ 1.0 0.0  1.0        (X,Y,Q): Position and charge
+-1.0 0.0 -1.0        (X,Y,Q): Position and charge
+8                    Number of lines to draw
+0.0  0.5             x0,y0: Initial point of line
+0.0  1.0             x0,y0: Initial point of line
+0.0  1.5             x0,y0: Initial point of line
+0.0  2.0             x0,y0: Initial point of line
+0.0 -0.5             x0,y0: Initial point of line
+0.0 -1.0             x0,y0: Initial point of line
+0.0 -1.5             x0,y0: Initial point of line
+0.0 -2.0             x0,y0: Initial point of line

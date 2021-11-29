@@ -1,0 +1,139 @@
+#!/bin/tcsh -f 
+
+
+# rk3.csh -f 2 -n -- 1 0 0 0 1 0 0 0 1 0.1 1000 0 40
+# gnuplot <<EOF
+#   set view 23, 48, 0.87, 3.76 # sets the scale of x-y axis / z-axis
+#   set xtics 1
+#   set ytics 1
+#   set ztics 1
+#   set ticslevel 0             #where z-axis begin
+#   set xlabel "x"
+#   set ylabel "y"
+#   set zlabel "z"
+#   set term post enhanced color eps 18
+#   set out "B.eps"
+#   splot [:][:][0:] "rk3.dat" u 2:3:4 w l notit
+#   set out
+# EOF
+#./rk3.csh -f 2 -- 1 0.1 0.1 0.0 1 0 0 0 1 0.1 1000 0 40
+# gnuplot <<EOF
+#  set view 67,132,1,1
+#  set ticslevel 0
+#  set xtics 1
+#  set ytics 1
+#  set ztics 1
+#  set xlabel "x"
+#  set ylabel "y"
+#  set zlabel "z"
+#  set term post enhanced color eps 18
+#  set out "BE.eps"
+#  splot [:][:][:] "rk3.dat" u 2:3:4 w l notit
+#  set out
+# EOF
+
+
+# NOT GOOD: Not physical, just impressive
+# particle in a mabnetic field B= (k1+k2 z) z for z>0, B=k1 z for z<0
+#./rk3.csh -n -f 3 1 10 0 0 1 0 0 0 1 .1 100000 0 1000
+
+# rk3.csh -f 4 -n -- 1 0.02 0 0 1 0 0 0 1 0.1 10000 0 500
+# gnuplot <<EOF
+#  set view 60,30,1,1
+#  set ticslevel 0
+#  set xtics 1
+#  set ytics 1
+#  set ztics 100
+#  set xlabel "x"
+#  set ylabel "y"
+#  set zlabel "z"
+#  set term post enhanced color eps 18
+#  set out "Bzy.eps"
+#  splot [:][:][:] "rk3.dat" u 2:3:4 w l notit
+#  set out
+# EOF
+# rk3.csh -f 5 -- 1.4 0.08 0.08 0 1 0 0 0 1 0.1 40000 0 3000
+# gnuplot <<EOF
+#  set view 62,354,1,1
+#  set ticslevel 0
+#  set xtics 1
+#  set ytics 1
+#  set ztics 1
+#  set xlabel "x"
+#  set ylabel "y"
+#  set zlabel "z"
+#  set term post enhanced color eps 18
+#  set out "Byz.eps"
+#  splot [:][:][:] "rk3.dat" u 2:3:4 w l notit
+#  set out
+# EOF
+
+# # #################################################
+# # Special Relativity plots:
+# # #################################################
+# sr.csh -f 1 -n -- 10 0 0 0 1 0 0 0 0.95 0.1 1000 0 20
+# gnuplot <<EOF
+#  set term post enhanced color eps 24
+#  set out "srB_xy.eps"
+#  set size ratio 1
+#  plot "sr.dat" u 2:3 w l notit
+#  set out
+#  set out "srB_xyz.eps"
+#  set view 60,30,1,1
+#  set ticslevel 0
+#  set xtics 0.4
+#  set ytics 0.4
+#  set ztics 0.4
+#  set xlabel "x"
+#  set ylabel "y"
+#  set zlabel "z"
+#  splot [0.9:1.7][-.4:][:] "sr.dat" u 2:3:4 w l notit
+#  set out
+# EOF
+# #  Add Electric field:
+# sr.csh -f 1 -- 10 0 0 1 1 0 0 0 0.95 0.1 1000 0 100
+# gnuplot <<EOF
+#  set term post enhanced color eps 24
+#  set out "srBE_xyz.eps"
+#  set view 60,30,1,1
+#  set ticslevel 0
+#  set xtics 0.4
+#  set ytics 0.4
+#  set ztics 20
+#  set xlabel "x"
+#  set ylabel "y"
+#  set zlabel "z"
+#  splot  [0.9:1.7][-.4:][:] "sr.dat" u 2:3:4 w l notit
+#  set out
+# EOF
+
+# # Van Allen belt: motion in dipole field
+# sr.csh -f 2 -n -- 1000 0 0 0 0.02 0 2 0 0 -0.99999 10000 0 5
+gnuplot <<EOF
+ set term post enhanced color eps 24
+ set out "srBd_xyz.eps"
+ set view 53,346,1,1
+ set ticslevel .2
+ set xtics 0.004
+ set ytics 0.004
+ set ztics 0.4
+ splot [:][:][:] "sr.dat" u 2:3:4 w l notit
+ set out
+EOF
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------

@@ -1,0 +1,328 @@
+bc = 0.5*log(1.0+sqrt(2.0));
+set fit errorvariables
+set macros
+set key bottom left
+# ---------------------------------------------------------------
+L=40;
+x1min=0.0400;x1max=0.130;
+x2min=0.0742;x2max=0.151;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=60;
+x1min=0.0230;x1max=0.144;
+x2min=0.0450;x2max=0.151;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=80;
+x1min=0.0175;x1max=0.161;
+x2min=0.0416;x2max=0.108;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=100;
+x1min=0.0136;x1max=0.0640;
+#x2min=0.0220;x2max=0.0750;
+x2min=0.0370;x2max=0.0725;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=120;
+x1min=0.0135;x1max=0.112;
+x2min=0.0317;x2max=0.133;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=140;
+x1min=0.0100;x1max=0.090;
+x2min=0.0237;x2max=0.086;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=160;
+x1min=0.0078;x1max=0.105;
+x2min=0.0237;x2max=0.105;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=200;
+x1min=0.00862;x1max=0.109;
+x2min=0.0191;x2max=0.105;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=500;
+x1min=0.0035;x1max=0.109;
+x2min=0.0105;x2max=0.059;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc{print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc{print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+L=1000;
+x1min=0.0035;x1max=0.109;
+x2min=0.0077;x2max=0.072;
+# ---------------------------------------------------------------
+chi1(x) = (x>=0.7*x1min&&x<=1.4*x1max)?(c1*x**(-g1)):(1/0);
+chi2(x) = (x>=0.7*x2min&&x<=1.4*x2max)?(c2*x**(-g2)):(1/0);
+command1 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3>bc&&(($7/$6)<0.08){print -(bc-$3)/bc,$6,$7}'\"";
+command2 = "\"<grep 'm ".L." ' all|awk 'BEGIN{bc= 0.5*log(1.0+sqrt(2.0))} $3<bc&&(($7/$6)<0.08){print  (bc-$3)/bc,$6,$7}'\"";
+g1=1.75;g2=1.75;
+fit [x1min:x1max] chi1(x) @command1 u 1:2:3 via c1,g1 
+fit [x2min:x2max] chi2(x) @command2 u 1:2:3 via c2,g2 
+set xlabel "t"
+plot \
+     @command1 u 1:2:3 w e t "L=".L." {/Symbol b}>{/Symbol b}_c",\
+     @command2 u 1:2:3 w e t "L=".L." {/Symbol b}<{/Symbol b}_c",\
+     chi1(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g1,g1_err), \
+     chi2(x) t "{/Symbol g}=".sprintf("%.3f +/- %.3f",g2,g2_err)
+setconst = sprintf("c1_%d = %f; c1_%d_err = %f;c2_%d = %f; c2_%d_err = %f;",L,c1,L,c1_err,L,c2,L,c2_err);
+@setconst;
+setconst = sprintf("g1_%d = %f; g1_%d_err = %f;g2_%d = %f; g2_%d_err = %f;",L,g1,L,g1_err,L,g2,L,g2_err);
+@setconst;
+set term post eps enha color 24
+set out  "beta_scale_gamma_".L.".eps"
+replot
+set out
+set term qt
+replot
+# ---------------------------------------------------------------
+print         '||======|=====================|=====================||'
+print         '||======|=====================|=====================||'
+print         '||------|---------------------|---------------------||'
+print sprintf("||   L  |   gamma   (t<0)     |  gamma   (t>0)      ||");
+print         '||------|---------------------|---------------------||'
+print sprintf("||  40  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_40,g1_40_err,g2_40,g2_40_err);
+print sprintf("||  60  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_60,g1_60_err,g2_60,g2_60_err);
+print sprintf("||  80  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_80,g1_80_err,g2_80,g2_80_err);
+print sprintf("|| 100  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_100,g1_100_err,g2_100,g2_100_err);
+print sprintf("|| 120  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_120,g1_120_err,g2_120,g2_120_err);
+print sprintf("|| 140  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_140,g1_140_err,g2_140,g2_140_err);
+print sprintf("|| 160  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_160,g1_160_err,g2_160,g2_160_err);
+print sprintf("|| 200  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_200,g1_200_err,g2_200,g2_200_err);
+print sprintf("|| 500  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_500,g1_500_err,g2_500,g2_500_err);
+print sprintf("||1000  |  %.4f +/- %.4f  |   %.4f +/-%.4f  ||",g1_1000,g1_1000_err,g2_1000,g2_1000_err);
+print         '||======|=====================|=====================||'
+#  ---------------------------------------------------------------------
+#  Copyright by Konstantinos N. Anagnostopoulos (2004-2014)
+#  Physics Dept., National Technical University,
+#  konstant@mail.ntua.gr, www.physics.ntua.gr/~konstant
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#  
+#  This program is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public Liense along
+#  with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  -----------------------------------------------------------------------
